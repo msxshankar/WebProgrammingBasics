@@ -20,20 +20,23 @@ def generate_summary_for_web(csvfile, html_title, html_filename):
 		html.write('</html>\n')
 
 def get_datalist_from_csv(csvfile):
-	global list_of_header_names 
+	global list_of_header_names, list_of_attributes
 	list_of_header_names = []
+	list_of_attributes = []
 	try:
 		with open(csvfile, "r") as diabetes_data:
 			#diabetes_data.readline()
 			reader = csv.reader(diabetes_data)
 			list_of_header_names = next(reader)
-			print(list_of_header_names)
+			list_of_attributes.append(list_of_header_names)
 			datalist = list(reader)
+			for row in reader:
+				list_of_attributes.append(row)
 			return datalist
-			
 			#header = get_headerdata_from_csv(csvfile)
 	except (FileNotFoundError):
 		return "File error"
+	
 '''
 def get_headerdata_from_csv(csvfile):
 	try:
@@ -71,7 +74,18 @@ def create_html_table_with_data(data):
 	html_string += "<td> Yes </td>"
 	html_string += "<td> No </td>"
 	html_string += "</tr>"
-
+	
+	occurences = 0
+	for i in list_of_attributes:
+		if i == 'Age' or 'Gender'
+			continue
+		else:
+			for j in 
+				if j = 'Yes'
+			occurences += 1
+				if i[columnindex].lower() == value:
+					occurences += 1
+			return occurences
 	x = -1
 	for record in data:
 		html_string += "<tr>\n"
