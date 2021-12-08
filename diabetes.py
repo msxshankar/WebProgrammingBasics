@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 
 
 def generate_summary_for_web(csvfile, html_title, html_filename):
-
+	
 	data = get_datalist_from_csv(csvfile)
 
 	if data == "File error":
@@ -20,14 +20,32 @@ def generate_summary_for_web(csvfile, html_title, html_filename):
 		html.write('</html>\n')
 
 def get_datalist_from_csv(csvfile):
+	global list_of_header_names 
+	list_of_header_names = []
 	try:
 		with open(csvfile, "r") as diabetes_data:
-			diabetes_data.readline()
+			#diabetes_data.readline()
 			reader = csv.reader(diabetes_data)
+			list_of_header_names = next(reader)
+			print(list_of_header_names)
 			datalist = list(reader)
 			return datalist
+			
+			#header = get_headerdata_from_csv(csvfile)
 	except (FileNotFoundError):
 		return "File error"
+'''
+def get_headerdata_from_csv(csvfile):
+	try:
+		with open(csvfile, "r") as header_data:
+			csv_reader = csv.reader(header_data)
+			list_of_header_names = []
+			for row in header_data:
+				list_of_header_names.append(row)
+				break
+	except (FileNotFoundError):
+		return "File error"
+'''
 
 def create_html_table_with_data(data):
 	html_string = "<style>\n"
@@ -38,14 +56,29 @@ def create_html_table_with_data(data):
 	html_string += "<table>\n"
 
 	html_string += "<tr>"
-	html_string += "<th>Attributes</th>"
-	html_string += "<th>Class</th>"
+	html_string += "<th rowspan='3'>Attributes</th>"
+	html_string += "<th colspan='4'>Class</th>"
 	html_string += "</tr>"
 
+	html_string += "<tr>"
+	html_string += "<th colspan='2'>Positive</th>"
+	html_string += "<th colspan='2'>Negative</th>"
+	html_string += "</tr>"
+
+	html_string += "<tr>"
+	html_string += "<td> Yes </td>"
+	html_string += "<td> No </td>"
+	html_string += "<td> Yes </td>"
+	html_string += "<td> No </td>"
+	html_string += "</tr>"
+
+	x = -1
 	for record in data:
 		html_string += "<tr>\n"
 		for datum in record:
 			html_string += "<td>" + datum + "</td>\n"
+			x += 1
+			print(x)
 		html_string += "</tr>\n\n"
 
 	html_string += "</table>\n\n"
