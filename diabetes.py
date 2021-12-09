@@ -29,9 +29,9 @@ def get_datalist_from_csv(csvfile):
 			reader = csv.reader(diabetes_data)
 			list_of_header_names = next(reader)
 			list_of_attributes.append(list_of_header_names)
-			datalist = list(reader)
 			for row in reader:
 				list_of_attributes.append(row)
+			datalist = list(reader)
 			return datalist
 			#header = get_headerdata_from_csv(csvfile)
 	except (FileNotFoundError):
@@ -75,17 +75,38 @@ def create_html_table_with_data(data):
 	html_string += "<td> No </td>"
 	html_string += "</tr>"
 	
-	occurences = 0
-	for i in list_of_attributes:
-		if i == 'Age' or 'Gender'
+	count_yes_positive = 0
+	count_yes_negative = 0
+	count_no_positive = 0
+	count_no_negative = 0
+	horizontal_count = 0
+	vertical_count = 0
+
+	for j in list_of_attributes[0]:
+		if j == 'Age' or j == 'Gender':
+			horizontal_count += 1
+			print(horizontal_count)
 			continue
 		else:
-			for j in 
-				if j = 'Yes'
-			occurences += 1
-				if i[columnindex].lower() == value:
-					occurences += 1
-			return occurences
+			for k in list_of_attributes:
+				if vertical_count >= 520:
+					break
+				vertical_count += 1
+				print(vertical_count)
+				if (list_of_attributes[vertical_count][horizontal_count] == 'Yes') and (list_of_attributes[vertical_count][16] == 'Positive'):
+					count_yes_positive += 1
+				if (list_of_attributes[vertical_count][horizontal_count] == 'No') and (list_of_attributes[vertical_count][16] == 'Negative'):
+					count_yes_negative += 1
+				if (list_of_attributes[vertical_count][horizontal_count] == 'Yes') and (list_of_attributes[vertical_count][16] == 'Positive'):
+					count_no_positive += 1
+				if (list_of_attributes[vertical_count][horizontal_count] == 'No') and (list_of_attributes[vertical_count][16] == 'Negative'):
+					count_no_negative += 1
+	print(count_yes_positive)
+	print(count_yes_negative)
+	print(count_no_positive)
+	print(count_no_negative)
+
+	
 	x = -1
 	for record in data:
 		html_string += "<tr>\n"
@@ -94,6 +115,7 @@ def create_html_table_with_data(data):
 			x += 1
 			print(x)
 		html_string += "</tr>\n\n"
+	
 
 	html_string += "</table>\n\n"
 	return html_string
