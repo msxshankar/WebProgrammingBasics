@@ -75,6 +75,8 @@ def create_html_table_with_data(data):
 	html_string += "<td> No </td>"
 	html_string += "</tr>"
 	
+	
+	
 	count_yes_positive = 0
 	count_yes_negative = 0
 	count_no_positive = 0
@@ -83,30 +85,46 @@ def create_html_table_with_data(data):
 	vertical_count = 0
 
 	for j in list_of_attributes[0]:
-		if j == 'Age' or j == 'Gender':
+		if j == 'Age' or j == 'Gender' or j == 'class':
 			horizontal_count += 1
 			print(horizontal_count)
 			continue
 		else:
 			for k in list_of_attributes:
 				if vertical_count >= 520:
-					break
+					html_string += "<tr>\n"
+					html_string += "<td>" + j + "</td>\n"
+					html_string += "<td>" + str(count_yes_positive) + "</td>\n"
+					html_string += "<td>" + str(count_no_positive) + "</td>\n"
+					html_string += "<td>" + str(count_yes_negative) + "</td>\n"
+					html_string += "<td>" + str(count_no_negative) + "</td>\n"
+					html_string += "</tr>\n\n"
+					horizontal_count += 1
+					vertical_count = 0
+					count_yes_positive = 0
+					count_no_positive = 0
+					count_yes_negative = 0
+					count_no_negative = 0
+					continue
 				vertical_count += 1
 				print(vertical_count)
 				if (list_of_attributes[vertical_count][horizontal_count] == 'Yes') and (list_of_attributes[vertical_count][16] == 'Positive'):
 					count_yes_positive += 1
-				if (list_of_attributes[vertical_count][horizontal_count] == 'No') and (list_of_attributes[vertical_count][16] == 'Negative'):
-					count_yes_negative += 1
-				if (list_of_attributes[vertical_count][horizontal_count] == 'Yes') and (list_of_attributes[vertical_count][16] == 'Positive'):
+				if (list_of_attributes[vertical_count][horizontal_count] == 'No') and (list_of_attributes[vertical_count][16] == 'Positive'):
 					count_no_positive += 1
+				if (list_of_attributes[vertical_count][horizontal_count] == 'Yes') and (list_of_attributes[vertical_count][16] == 'Negative'):
+					count_yes_negative += 1
 				if (list_of_attributes[vertical_count][horizontal_count] == 'No') and (list_of_attributes[vertical_count][16] == 'Negative'):
 					count_no_negative += 1
+	
+	
+
 	print(count_yes_positive)
-	print(count_yes_negative)
 	print(count_no_positive)
+	print(count_yes_negative)
 	print(count_no_negative)
 
-	
+	'''
 	x = -1
 	for record in data:
 		html_string += "<tr>\n"
@@ -115,7 +133,7 @@ def create_html_table_with_data(data):
 			x += 1
 			print(x)
 		html_string += "</tr>\n\n"
-	
+	'''
 
 	html_string += "</table>\n\n"
 	return html_string
