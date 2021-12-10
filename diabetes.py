@@ -2,19 +2,22 @@ import csv
 from matplotlib import pyplot as plt
 
 
-def generate_summary_for_web(csvfile, html_title, html_filename):
+def generate_summary_for_web(csvfile, html_title, html_filename, show_barchart_gender=True):
 	
 	data = get_datalist_from_csv(csvfile)
 
 	if data == "File error":
 		return
 	
+	if show_barchart_gender == True:
+		draw_bar_chart()
+
 	with open(html_filename, "w") as html:
 		html.write('<html>')
 		html.write('<title>' + html_title + '</title>\n')
 		html.write('<center>\n')
 		html.write('<h1>' + html_title + '</h1>\n')
-		html_table = create_html_table_with_data(data)
+		html_table = create_html_table_with_data(data, show_barchart_gender)
 		html.write(html_table)
 		html.write('</center>\n')
 		html.write('</html>\n')
@@ -33,27 +36,15 @@ def get_datalist_from_csv(csvfile):
 				list_of_attributes.append(row)
 			datalist = list(reader)
 			return datalist
-			#header = get_headerdata_from_csv(csvfile)
 	except (FileNotFoundError):
 		return "File error"
-	
-'''
-def get_headerdata_from_csv(csvfile):
-	try:
-		with open(csvfile, "r") as header_data:
-			csv_reader = csv.reader(header_data)
-			list_of_header_names = []
-			for row in header_data:
-				list_of_header_names.append(row)
-				break
-	except (FileNotFoundError):
-		return "File error"
-'''
 
-def create_html_table_with_data(data):
+def create_html_table_with_data(data, show_barchart_gender):
 	html_string = "<style>\n"
 	html_string += "table,th,td {\n border: 1px solid black; \n"
 	html_string += "border-collapse: collapse; text-align:center\n"
+	html_string += "}\n"
+	html_string += "tr:nth-child(2n + 4) {\n background-color: #89CFF0; \n"
 	html_string += "}\n"
 	html_string += "</style>\n"
 	html_string += "<table>\n"
@@ -75,8 +66,6 @@ def create_html_table_with_data(data):
 	html_string += "<td> No </td>"
 	html_string += "</tr>"
 	
-	
-	
 	count_yes_positive = 0
 	count_yes_negative = 0
 	count_no_positive = 0
@@ -87,7 +76,6 @@ def create_html_table_with_data(data):
 	for j in list_of_attributes[0]:
 		if j == 'Age' or j == 'Gender' or j == 'class':
 			horizontal_count += 1
-			print(horizontal_count)
 			continue
 		else:
 			for k in list_of_attributes:
@@ -107,7 +95,6 @@ def create_html_table_with_data(data):
 					count_no_negative = 0
 					continue
 				vertical_count += 1
-				print(vertical_count)
 				if (list_of_attributes[vertical_count][horizontal_count] == 'Yes') and (list_of_attributes[vertical_count][16] == 'Positive'):
 					count_yes_positive += 1
 				if (list_of_attributes[vertical_count][horizontal_count] == 'No') and (list_of_attributes[vertical_count][16] == 'Positive'):
@@ -117,25 +104,53 @@ def create_html_table_with_data(data):
 				if (list_of_attributes[vertical_count][horizontal_count] == 'No') and (list_of_attributes[vertical_count][16] == 'Negative'):
 					count_no_negative += 1
 	
-	
-
-	print(count_yes_positive)
-	print(count_no_positive)
-	print(count_yes_negative)
-	print(count_no_negative)
-
-	'''
-	x = -1
-	for record in data:
-		html_string += "<tr>\n"
-		for datum in record:
-			html_string += "<td>" + datum + "</td>\n"
-			x += 1
-			print(x)
-		html_string += "</tr>\n\n"
-	'''
-
 	html_string += "</table>\n\n"
+
+	if show_barchart_gender == True:
+		html_string += "<img src='barchart.png' alt='Bar Chart'>"
+
 	return html_string
+
+def draw_bar_chart():
+
+	count_male_positive = 0
+	count_female_positive = 0
+	count_male_negative = 0
+	count_female_negative = 0
+	bar_vertical_count = 0
+	count_male = []
+	count_female = []
+
+	for l in list_of_attributes:
+		bar_vertical_count += 1
+		if bar_vertical_count >= 520:
+			count_male.append(count_male_positive)
+			count_male.append(count_male_negative)
+			count_female.append(count_female_positive)
+			count_female.append(count_female_negative)
+
+			ind = [1,2]
+			width = 0.3
+			x = [x - width for x in ind]
+			
+			plt.bar(x, count_male, label="Male", width = width)
+			plt.bar(ind, count_female, label="Female", width = width)
+			plt.title("Gender of Positive vs Negative Cases")
+			plt.xlabel("Class")
+			plt.ylabel("Count")
+			plt.xticks(ind, ('Positive', 'Negative'))			
+			plt.legend(loc='best')
+			plt.savefig('barchart.png')
+			break
+
+		if (list_of_attributes[bar_vertical_count][1] == 'Male') and (list_of_attributes[bar_vertical_count][16] == 'Positive'):
+			count_male_positive += 1
+		if (list_of_attributes[bar_vertical_count][1] == 'Female') and (list_of_attributes[bar_vertical_count][16] == 'Positive'):
+			count_female_positive += 1
+		if (list_of_attributes[bar_vertical_count][1] == 'Male') and (list_of_attributes[bar_vertical_count][16] == 'Negative'):
+			count_male_negative += 1
+		if (list_of_attributes[bar_vertical_count][1] == 'Female') and (list_of_attributes[bar_vertical_count][16] == 'Negative'):
+			count_female_negative += 1
+			
 				
-generate_summary_for_web("diabetes_data.csv", "Diabetes Table", "summary.html")
+generate_summary_for_web("diabetes_data.csv", "Diabetes Table", "summary.html", show_barchart_gender=True)
