@@ -41,8 +41,10 @@ def get_datalist_from_csv(csvfile):
 
 def create_html_table_with_data(data, show_barchart_gender):
 	html_string = "<style>\n"
-	html_string += "table,th,td {\n border: 1px solid black; \n"
+	html_string += ".styled-table,th,td {\n border: 1px solid blue; \n"
 	html_string += "border-collapse: collapse; text-align:center\n"
+	html_string += "font-family: sans-serif;\n"
+	html_string += "box-shadow: 0 0 20px rgba(0,0,0,0.15);\n"
 	html_string += "}\n"
 	html_string += "tr:nth-child(2n + 4) {\n background-color: #89CFF0; \n"
 	html_string += "}\n"
@@ -81,7 +83,7 @@ def create_html_table_with_data(data, show_barchart_gender):
 			for k in list_of_attributes:
 				if vertical_count >= 520:
 					html_string += "<tr>\n"
-					html_string += "<td>" + j + "</td>\n"
+					html_string += "<td>" + j.capitalize() + "</td>\n"
 					html_string += "<td>" + str(count_yes_positive) + "</td>\n"
 					html_string += "<td>" + str(count_no_positive) + "</td>\n"
 					html_string += "<td>" + str(count_yes_negative) + "</td>\n"
@@ -132,13 +134,19 @@ def draw_bar_chart():
 			ind = [1,2]
 			width = 0.3
 			x = [x - width for x in ind]
-			
+
+			middle = []
+			o = -1
+			for p in ind:
+				o += 1
+				middle.append((p + x[o])/2)
+
 			plt.bar(x, count_male, label="Male", width = width)
 			plt.bar(ind, count_female, label="Female", width = width)
 			plt.title("Gender of Positive vs Negative Cases")
 			plt.xlabel("Class")
 			plt.ylabel("Count")
-			plt.xticks(ind, ('Positive', 'Negative'))			
+			plt.xticks(middle, ('Positive', 'Negative'))			
 			plt.legend(loc='best')
 			plt.savefig('barchart.png')
 			break
