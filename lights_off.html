@@ -26,12 +26,38 @@ function press(i,j) {
 }
 
 // Please complete this function
-function checkAllOff(){ 
+function checkAllOff(){
+        count = 0;
+        for (var i=0; i < 5; i++) {
+                for (var j=0; j<5; j++) {
+                        b=document.getElementById("but_" + i + j);
+                        t = b.innerHTML;
+                        if (t=="O") {
+                                count += 1;
+                        }
+                }
+        }
+        if (count == 0) {
+                var end = document.getElementById("end").innerHTML = "Congratulations! All lights out!";
+                end.style.display = "none";
+        }
 }
 
 
 // Please complete this function
 function resetGrid(){
+        end.style.display = "block";
+        end.remove();
+        for (var i =0; i < 5; i++) {
+                for (var j=0; j < 5; j++) {
+                        b=document.getElementById("but_" + i + j);
+                        t = b.innerHTML;
+                        if (t=="X") {b.innerHTML = "O";
+                                b.setAttribute("style", "color:green; background-color:white");
+                                }
+                }                        
+        }
+        toggle(2,2);
 }
 
 // 
