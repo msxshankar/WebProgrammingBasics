@@ -168,6 +168,3 @@ def draw_bar_chart():
 			count_male_negative += 1
 		if (list_of_attributes[bar_vertical_count][1] == 'Female') and (list_of_attributes[bar_vertical_count][16] == 'Negative'):
 			count_female_negative += 1
-			
-				
-generate_summary_for_web("diabetes_data.csv", "Diabetes Table", "summary.html", show_barchart_gender=True)
