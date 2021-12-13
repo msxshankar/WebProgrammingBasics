@@ -37,17 +37,17 @@ function checkAllOff(){
                         }
                 }
         }
+        
         if (count == 0) {
                 var end = document.getElementById("end").innerHTML = "Congratulations! All lights out!";
-                end.style.display = "none";
+                end.style.display = "block";
         }
 }
 
 
 // Please complete this function
 function resetGrid(){
-        end.style.display = "block";
-        end.remove();
+        end.style.display = "none";
         for (var i =0; i < 5; i++) {
                 for (var j=0; j < 5; j++) {
                         b=document.getElementById("but_" + i + j);

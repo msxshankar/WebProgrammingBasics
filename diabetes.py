@@ -7,7 +7,7 @@ def generate_summary_for_web(csvfile, html_title, html_filename, show_barchart_g
 	data = get_datalist_from_csv(csvfile)
 
 	if data == "File error":
-		return
+		return(0)
 	
 	if show_barchart_gender == True:
 		draw_bar_chart()
@@ -28,7 +28,6 @@ def get_datalist_from_csv(csvfile):
 	list_of_attributes = []
 	try:
 		with open(csvfile, "r") as diabetes_data:
-			#diabetes_data.readline()
 			reader = csv.reader(diabetes_data)
 			list_of_header_names = next(reader)
 			list_of_attributes.append(list_of_header_names)
@@ -41,13 +40,23 @@ def get_datalist_from_csv(csvfile):
 
 def create_html_table_with_data(data, show_barchart_gender):
 	html_string = "<style>\n"
-	html_string += ".styled-table,th,td {\n border: 1px solid blue; \n"
-	html_string += "border-collapse: collapse; text-align:center\n"
+	html_string += "table {\n border: 3px solid black; \n"
+	html_string += "border-collapse: collapse;\n"
+	html_string += "background-image: linear-gradient(135deg, #93a5cf, #e4efe9);\n"
+	html_string += "}\n"
+	html_string += "th {\n border: 1px solid black; \n"
+	html_string += "background-color: #66a6ff;\n}\n"
+	html_string += "td {\n border: 1px solid black;\n"
+	html_string += "border-collapse: collapse;\n"
+	html_string += "text-align: center;\n"
 	html_string += "font-family: sans-serif;\n"
-	html_string += "box-shadow: 0 0 20px rgba(0,0,0,0.15);\n"
+	html_string += "padding: 15px;\n"
+	html_string += "border-radius: 5px;\n"
 	html_string += "}\n"
-	html_string += "tr:nth-child(2n + 4) {\n background-color: #89CFF0; \n"
+	html_string += "tr:nth-child(2n + 4) {\n background-image: linear-gradient(135deg, #a3bded, #6991c7); \n"
+
 	html_string += "}\n"
+	html_string += "td:hover {background: #D3D3D3;}"
 	html_string += "</style>\n"
 	html_string += "<table>\n"
 
@@ -62,10 +71,10 @@ def create_html_table_with_data(data, show_barchart_gender):
 	html_string += "</tr>"
 
 	html_string += "<tr>"
-	html_string += "<td> Yes </td>"
-	html_string += "<td> No </td>"
-	html_string += "<td> Yes </td>"
-	html_string += "<td> No </td>"
+	html_string += "<th> Yes </th>"
+	html_string += "<th> No </th>"
+	html_string += "<th> Yes </th>"
+	html_string += "<th> No </th>"
 	html_string += "</tr>"
 	
 	count_yes_positive = 0
@@ -141,8 +150,8 @@ def draw_bar_chart():
 				o += 1
 				middle.append((p + x[o])/2)
 
-			plt.bar(x, count_male, label="Male", width = width)
-			plt.bar(ind, count_female, label="Female", width = width)
+			plt.bar(x, count_male, label="Male", width = width, color=('#93a5cf'), edgecolor='black')
+			plt.bar(ind, count_female, label="Female", width = width, color = ('#6991c7'), edgecolor='black')
 			plt.title("Gender of Positive vs Negative Cases")
 			plt.xlabel("Class")
 			plt.ylabel("Count")
